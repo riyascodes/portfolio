@@ -81,7 +81,13 @@ const Navbar = () => {
                   key={link.name}
                   href={link.href}
                   className="text-foreground hover:text-primary transition-colors py-2"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsMobileMenuOpen(false);
+                    setTimeout(() => {
+                      document.querySelector(link.href)?.scrollIntoView({ behavior: 'smooth' });
+                    }, 100);
+                  }}
                 >
                   {link.name}
                 </a>
@@ -89,7 +95,13 @@ const Navbar = () => {
               <a
                 href="#contact"
                 className="px-5 py-3 rounded-lg bg-primary text-primary-foreground font-semibold text-center"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsMobileMenuOpen(false);
+                  setTimeout(() => {
+                    document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
+                  }, 100);
+                }}
               >
                 Hire Me
               </a>
