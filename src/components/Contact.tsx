@@ -1,36 +1,96 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, MapPin, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import { z } from 'zod';
+
+// Validation schema for contact form
+const contactSchema = z.object({
+  name: z.string()
+    .trim()
+    .min(2, 'Name must be at least 2 characters')
+    .max(100, 'Name must be less than 100 characters'),
+  email: z.string()
+    .trim()
+    .email('Please enter a valid email address')
+    .max(255, 'Email must be less than 255 characters'),
+  subject: z.string()
+    .trim()
+    .min(3, 'Subject must be at least 3 characters')
+    .max(200, 'Subject must be less than 200 characters'),
+  message: z.string()
+    .trim()
+    .min(10, 'Message must be at least 10 characters')
+    .max(2000, 'Message must be less than 2000 characters'),
+});
+
+type ContactFormData = z.infer<typeof contactSchema>;
+type FormErrors = Partial<Record<keyof ContactFormData, string>>;
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ContactFormData>({
     name: '',
     email: '',
     subject: '',
     message: '',
   });
+  const [errors, setErrors] = useState<FormErrors>({});
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+
+  const validateForm = (): boolean => {
+    const result = contactSchema.safeParse(formData);
+    
+    if (!result.success) {
+      const fieldErrors: FormErrors = {};
+      result.error.errors.forEach((err) => {
+        if (err.path[0]) {
+          fieldErrors[err.path[0] as keyof ContactFormData] = err.message;
+        }
+      });
+      setErrors(fieldErrors);
+      return false;
+    }
+    
+    setErrors({});
+    return true;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate form data before submission
+    if (!validateForm()) {
+      return;
+    }
+    
     setStatus('sending');
     
     // Simulate form submission - replace with actual EmailJS or backend integration
+    // The validated and sanitized data is ready for server-side processing
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     // For demo purposes, always succeed
     setStatus('success');
     setFormData({ name: '', email: '', subject: '', message: '' });
+    setErrors({});
     
     // Reset status after 5 seconds
     setTimeout(() => setStatus('idle'), 5000);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: value,
     }));
+    
+    // Clear error for field when user starts typing
+    if (errors[name as keyof ContactFormData]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: undefined,
+      }));
+    }
   };
 
   return (
@@ -113,10 +173,13 @@ const Contact = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 rounded-lg bg-secondary border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                  maxLength={100}
+                  className={`w-full px-4 py-3 rounded-lg bg-secondary border ${errors.name ? 'border-destructive' : 'border-border'} focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all`}
                   placeholder="John Doe"
                 />
+                {errors.name && (
+                  <p className="text-destructive text-sm mt-1">{errors.name}</p>
+                )}
               </div>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium mb-2">Email</label>
@@ -126,10 +189,13 @@ const Contact = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 rounded-lg bg-secondary border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                  maxLength={255}
+                  className={`w-full px-4 py-3 rounded-lg bg-secondary border ${errors.email ? 'border-destructive' : 'border-border'} focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all`}
                   placeholder="john@example.com"
                 />
+                {errors.email && (
+                  <p className="text-destructive text-sm mt-1">{errors.email}</p>
+                )}
               </div>
             </div>
 
@@ -141,10 +207,13 @@ const Contact = () => {
                 name="subject"
                 value={formData.subject}
                 onChange={handleChange}
-                required
-                className="w-full px-4 py-3 rounded-lg bg-secondary border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                maxLength={200}
+                className={`w-full px-4 py-3 rounded-lg bg-secondary border ${errors.subject ? 'border-destructive' : 'border-border'} focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all`}
                 placeholder="Project Inquiry"
               />
+              {errors.subject && (
+                <p className="text-destructive text-sm mt-1">{errors.subject}</p>
+              )}
             </div>
 
             <div className="mb-6">
@@ -154,11 +223,14 @@ const Contact = () => {
                 name="message"
                 value={formData.message}
                 onChange={handleChange}
-                required
+                maxLength={2000}
                 rows={5}
-                className="w-full px-4 py-3 rounded-lg bg-secondary border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all resize-none"
+                className={`w-full px-4 py-3 rounded-lg bg-secondary border ${errors.message ? 'border-destructive' : 'border-border'} focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all resize-none`}
                 placeholder="Tell me about your project..."
               />
+              {errors.message && (
+                <p className="text-destructive text-sm mt-1">{errors.message}</p>
+              )}
             </div>
 
             <motion.button
