@@ -12,6 +12,7 @@ const socialLinks = [
 const codingProfiles = [
   { name: 'LeetCode', icon: Code2, url: 'https://leetcode.com' },
   { name: 'HackerRank', icon: FileCode, url: 'https://hackerrank.com' },
+  { name: 'GeeksforGeeks', icon: Code2, url: 'https://geeksforgeeks.org' },
 ];
 
 const Footer = () => {
