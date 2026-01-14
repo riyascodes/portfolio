@@ -90,10 +90,10 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Alex Chen. All rights reserved.
+            © {new Date().getFullYear()} Mohamed Riyas. All rights reserved.
           </p>
           <p className="text-sm text-muted-foreground">
-            Built with React, TypeScript & Tailwind CSS
+            Built with React & Django  
           </p>
         </div>
       </div>

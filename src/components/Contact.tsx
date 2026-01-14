@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, MapPin, Send, CheckCircle, AlertCircle } from 'lucide-react';
 import { z } from 'zod';
+import emailjs from '@emailjs/browser';
 
 // Validation schema for contact form
 const contactSchema = z.object({
@@ -56,25 +57,52 @@ const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validate form data before submission
     if (!validateForm()) {
       return;
     }
-    
+
     setStatus('sending');
-    
-    // Simulate form submission - replace with actual EmailJS or backend integration
-    // The validated and sanitized data is ready for server-side processing
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    // For demo purposes, always succeed
-    setStatus('success');
-    setFormData({ name: '', email: '', subject: '', message: '' });
-    setErrors({});
-    
-    // Reset status after 5 seconds
-    setTimeout(() => setStatus('idle'), 5000);
+
+    try {
+      // Configure these in your .env file:
+      // VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID, VITE_EMAILJS_PUBLIC_KEY
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID as string;
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string;
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string;
+
+      if (!serviceId || !templateId || !publicKey) {
+        console.error('EmailJS environment variables are not set');
+        setStatus('error');
+        return;
+      }
+
+      await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+        },
+        publicKey,
+      );
+
+      setStatus('success');
+      setFormData({ name: '', email: '', subject: '', message: '' });
+      setErrors({});
+
+      // Reset status after 5 seconds
+      setTimeout(() => setStatus('idle'), 5000);
+    } catch (err) {
+      console.error('Failed to send message via EmailJS', err);
+      setStatus('error');
+
+      // Reset back to idle after a short delay so the user can retry
+      setTimeout(() => setStatus('idle'), 5000);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -127,8 +155,11 @@ const Contact = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold">Email</h3>
-                  <a href="mailto:alex@example.com" className="text-muted-foreground hover:text-primary transition-colors">
-                    alex@example.com
+                  <a
+                    href="mailto:your-email@example.com"
+                    className="text-muted-foreground hover:text-primary transition-colors break-all"
+                  >
+                    your-email@example.com
                   </a>
                 </div>
               </div>
