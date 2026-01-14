@@ -7,18 +7,18 @@ interface Skill {
 }
 
 const skills: Skill[] = [
-  { name: 'Python', level: 95, category: 'Backend' },
-  { name: 'Django', level: 90, category: 'Backend' },
-  { name: 'FastAPI', level: 85, category: 'Backend' },
-  { name: 'React', level: 88, category: 'Frontend' },
-  { name: 'TypeScript', level: 85, category: 'Frontend' },
-  { name: 'PostgreSQL', level: 85, category: 'Database' },
-  { name: 'MySQL', level: 82, category: 'Database' },
-  { name: 'Docker', level: 80, category: 'DevOps' },
-  { name: 'AWS', level: 75, category: 'DevOps' },
-  { name: 'Redis', level: 78, category: 'Backend' },
-  { name: 'Git', level: 90, category: 'Tools' },
-  { name: 'REST APIs', level: 92, category: 'Backend' },
+  { name: 'Python', level: 90, category: 'Backend' },
+  { name: 'Django', level: 70, category: 'Backend' },
+  // { name: 'FastAPI', level: 85, category: 'Backend' },
+  { name: 'React', level: 70, category: 'Frontend' },
+  { name: 'Javascript', level: 90, category: 'Frontend & Backend' },
+  // { name: 'PostgreSQL', level: 85, category: 'Database' },
+  { name: 'MySQL', level: 70, category: 'Database' },
+  { name: 'Css', level: 80, category: 'Frontend' },
+  // { name: 'AWS', level: 75, category: 'DevOps' },
+  { name: 'Html', level: 90, category: 'Frontend' },
+  { name: 'Git & Github', level: 90, category: 'Tools' },
+  { name: 'REST APIs', level: 72, category: 'Backend' },
 ];
 
 const categories = [
@@ -110,7 +110,7 @@ const Skills = () => {
         >
           <h3 className="text-lg font-semibold mb-4 text-muted-foreground">Also experienced with</h3>
           <div className="flex flex-wrap justify-center gap-3">
-            {['GraphQL', 'Celery', 'RabbitMQ', 'Nginx', 'Linux', 'CI/CD', 'Jest', 'Pytest', 'Tailwind CSS'].map((tech) => (
+            {['Excel','linux'].map((tech) => (
               <span key={tech} className="px-4 py-2 rounded-full bg-secondary text-sm text-muted-foreground hover:text-foreground transition-colors">
                 {tech}
               </span>

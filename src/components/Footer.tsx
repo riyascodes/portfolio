@@ -2,17 +2,17 @@ import { motion } from 'framer-motion';
 import { Github, Linkedin, Twitter, Youtube, Instagram, Code2, FileCode } from 'lucide-react';
 
 const socialLinks = [
-  { name: 'GitHub', icon: Github, url: 'https://github.com' },
-  { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com' },
-  { name: 'Twitter', icon: Twitter, url: 'https://twitter.com' },
-  { name: 'YouTube', icon: Youtube, url: 'https://youtube.com' },
-  { name: 'Instagram', icon: Instagram, url: 'https://instagram.com' },
+  { name: 'GitHub', icon: Github, url: 'https://github.com/riyascodes' },
+  { name: 'LinkedIn', icon: Linkedin, url: 'https://www.linkedin.com/in/mohamed-riyas-dev/' },
+  // { name: 'Twitter', icon: Twitter, url: 'https://twitter.com' },
+  // { name: 'YouTube', icon: Youtube, url: 'https://youtube.com' },
+  { name: 'Instagram', icon: Instagram, url: 'https://www.instagram.com/riyaz_smiley_22/' },
 ];
 
 const codingProfiles = [
-  { name: 'LeetCode', icon: Code2, url: 'https://leetcode.com' },
-  { name: 'HackerRank', icon: FileCode, url: 'https://hackerrank.com' },
-  { name: 'GeeksforGeeks', icon: Code2, url: 'https://geeksforgeeks.org' },
+  // { name: 'LeetCode', icon: Code2, url: 'https://leetcode.com' },
+  // { name: 'HackerRank', icon: FileCode, url: 'https://hackerrank.com' },
+  { name: 'GeeksforGeeks', icon: Code2, url: 'https://www.geeksforgeeks.org/profile/mdriyas2ynb6' },
 ];
 
 const Footer = () => {
@@ -43,7 +43,7 @@ const Footer = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <h3 className="font-heading font-semibold mb-4">Connect</h3>
+            <h3 className="font-heading font-semibold mb-4">Connect With</h3>
             <div className="flex flex-wrap gap-3">
               {socialLinks.map((link) => (
                 <motion.a
